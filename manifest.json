@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Pivotal Buttons",
+  "version": "1.0",
+  "description": "Adds buttons to Pivotal",
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "css": ["css/content.css"],
+      "matches": ["https://www.pivotaltracker.com/*"]
+    }
+  ],
+  "icons": {
+    "16": "icons/PivotalTrackerIcon16.png",
+    "32": "icons/PivotalTrackerIcon32.png",
+    "48": "icons/PivotalTrackerIcon48.png",
+    "128": "icons/PivotalTrackerIcon128.png"
+  }
+}
