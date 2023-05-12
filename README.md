@@ -1,6 +1,7 @@
 # Pivotal Buttons Extension
 Chrome Extension for Adding Useful Pivotal Buttons
 
+![Buttons](./images/Pivotal-Buttons.png)
 
 ### How to load extension
 [Loading an unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked)
