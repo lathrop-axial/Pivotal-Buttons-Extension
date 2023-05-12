@@ -10,3 +10,4 @@ Chrome Extension for Adding Useful Pivotal Buttons
 Guides and Inspiration
  * [Chrome Extension Tutorial](https://developer.chrome.com/docs/extensions/mv3/getstarted/)
  * [pivotal_markdown_link](https://github.com/hjdarnel/pivotal_markdown_link)
+ * [easy-copy-for-pivotal-tracker](https://github.com/fukayatsu/easy-copy-for-pivotal-tracker)
