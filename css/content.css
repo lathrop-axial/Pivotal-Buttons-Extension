@@ -1,3 +1,7 @@
+/* Source:
+Thanks to https://github.com/hjdarnel/pivotal_markdown_link/blob/master/src/pmdl.css
+for figuring out the classes to target.
+ */
 section.model_details .story .persistence.use_click_to_copy .close {
   width: 65px !important;
 }
