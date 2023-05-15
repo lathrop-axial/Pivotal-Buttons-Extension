@@ -1,11 +1,4 @@
 /*
-    Get the story name from DOM
- */
-function getStoryName(story) {
-    return story.querySelector("fieldset.name [name='story[name]']").value;
-}
-
-/*
     Construct a Markdown formatted link for text and a link
  */
 function makeMdLink(text, url) {
@@ -15,21 +8,16 @@ function makeMdLink(text, url) {
 /*
     Add the new buttons into the page.
  */
-function addButtons() {
-    // Find the first button that copies to clipboard on the page,
-    // to use as an anchor for where we should put the new buttons.
-    const copyLinkButton = document.querySelector('.clipboard_button');
+function addButtons(copyLinkButton) {
     const story = copyLinkButton.closest("form.story.model")
-
     const storyName = story.querySelector("fieldset.name [name='story[name]']").value;
     const storyUrl = copyLinkButton.getAttribute('data-clipboard-text');
     const storyMdLink = makeMdLink(storyName, storyUrl);
 
     // Add button to copy the Markdown link to the clipboard
     const mdLinkButton = document.createElement('button');
-    mdLinkButton.classList.add('autosaves', 'clipboard_button', 'link', 'left_endcap', 'hoverable', 'story-link');
+    mdLinkButton.classList.add('autosaves', 'clipboard_button', 'link', 'left_endcap', 'hoverable', 'story-link', 'pbe-title-link');
     mdLinkButton.setAttribute('type', 'button');
-    mdLinkButton.setAttribute('id', 'title-link');
     mdLinkButton.setAttribute('data-clipboard-text', storyMdLink);
     mdLinkButton.setAttribute('title', 'Copy a Markdown link to this story');
     mdLinkButton.setAttribute('tabIndex', '-1');
@@ -37,9 +25,8 @@ function addButtons() {
 
     // Add button to copy the story Title to the clipboard
     const titleButton = document.createElement('button');
-    titleButton.classList.add('autosaves', 'clipboard_button', 'link', 'left_endcap', 'hoverable', 'story-title');
+    titleButton.classList.add('autosaves', 'clipboard_button', 'link', 'left_endcap', 'hoverable', 'story-title', 'pbe-markdown-link');
     titleButton.setAttribute('type', 'button');
-    titleButton.setAttribute('id', 'md-link');
     titleButton.setAttribute('data-clipboard-text', storyName);
     titleButton.setAttribute('title', 'Copy the story title');
     titleButton.setAttribute('tabIndex', '-1');
@@ -59,17 +46,19 @@ function addButtons() {
     be there yet.
  */
 function waitFor(selector) {
-    if (!document.querySelector('#md-link')) {
+    if (!document.querySelector('.pbe-markdown-link')) {
         if (document.querySelector(selector)) {
-            addButtons();
+            addButtons(document.querySelector(selector));
             return;
         }
 
         function mutationCallback(mutationsList, observer) {
-            if (document.querySelector(selector)) {
-                addButtons();
-                observer.disconnect();
-            }
+            mutationsList.forEach(mutation => {
+                if (mutation.target.matches('.story') && mutation.target.querySelector(selector)) {
+                    addButtons(mutation.target.querySelector(selector));
+                }
+            });
+            // we never call observer.disconnect() in case we open several stories throughout the session
         }
 
         const observer = new MutationObserver(mutationCallback);
