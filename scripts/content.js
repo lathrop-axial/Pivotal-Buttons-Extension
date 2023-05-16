@@ -6,6 +6,15 @@ function makeMdLink(text, url) {
 }
 
 /*
+    Remove existing added buttons, such as when maximizing one story then another
+ */
+function removeButtons(container) {
+    [].slice.call(container.querySelectorAll('.pbe-title-link, .pbe-markdown-link')).forEach(element => {
+        element.remove();
+    });
+}
+
+/*
     Add the new buttons into the page.
  */
 function addButtons(copyLinkButton) {
@@ -39,38 +48,16 @@ function addButtons(copyLinkButton) {
     idButton.setAttribute('data-clipboard-text', storyId.replace(/#/g, ''));
 }
 
-/*
-    Wait for the anchor element to be found in the DOM.
-
-    When the extension first loads, it will not necessarily
-    be there yet.
- */
-function waitFor(selector) {
-    if (!document.querySelector('.pbe-markdown-link')) {
-        if (document.querySelector(selector)) {
-            addButtons(document.querySelector(selector));
-            return;
+function mutationCallback(mutationsList, observer) {
+    const selector = '.clipboard_button';
+    mutationsList.forEach(mutation => {
+        if (mutation.target.matches('.story, .main.maximized') && mutation.target.querySelector(selector)) {
+            removeButtons(mutation.target);
+            addButtons(mutation.target.querySelector(selector));
         }
-
-        function mutationCallback(mutationsList, observer) {
-            mutationsList.forEach(mutation => {
-                if (mutation.target.matches('.story') && mutation.target.querySelector(selector)) {
-                    addButtons(mutation.target.querySelector(selector));
-                }
-            });
-            // we never call observer.disconnect() in case we open several stories throughout the session
-        }
-
-        const observer = new MutationObserver(mutationCallback);
-        observer.observe(document.body, {childList: true, subtree: true});
-    }
+    });
+    // we never call observer.disconnect() in case we open several stories throughout the session
 }
 
-// It seems like we can't immediately make a MutationObserver
-// and have to wait a bit for the DOM to be ready.
-// It worked on one Pivotal Project, but not another, even
-// in the same browser window.
-// 500ms was chosen after some testing.
-setTimeout(() => {
-    waitFor('.clipboard_button');
-}, 500);
+const observer = new MutationObserver(mutationCallback);
+observer.observe(document.body, {childList: true, subtree: true});
