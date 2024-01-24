@@ -19,7 +19,7 @@ function removeButtons(container) {
  */
 function addButtons(copyLinkButton) {
     const story = copyLinkButton.closest("form.story.model")
-    const storyName = story.querySelector("fieldset.name [name='story[name]']").value;
+    const storyName = story.querySelector("fieldset.name [name='story[name]']").value.replace(/'/g, '’');
     const storyUrl = copyLinkButton.getAttribute('data-clipboard-text');
     const storyMdLink = makeMdLink(storyName, storyUrl);
 
